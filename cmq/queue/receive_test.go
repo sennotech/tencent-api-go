@@ -9,9 +9,9 @@ import (
 )
 
 func TestReceiveMessage(t *testing.T) {
-    account, _ := tencent.NewAccount(os.Getenv("secretId"),
-        os.Getenv("secretKey"))
-    q, _ := New(account, os.Getenv("endpoint"), os.Getenv("queueName"))
+    account, _ := tencent.NewAccount(os.Getenv("CMQ_SECRET_ID"),
+        os.Getenv("CMQ_SECRET_KEY"))
+    q, _ := New(account, os.Getenv("CMQ_QUEUE_ENDPOINT"), os.Getenv("CMQ_QUEUE_NAME"))
 
     result, err := q.ReceiveMessage(5)
     if err != nil {

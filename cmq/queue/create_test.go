@@ -10,9 +10,9 @@ import (
 )
 
 func TestCreate(t *testing.T) {
-    account, _ := tencent.NewAccount(os.Getenv("secretId"),
-        os.Getenv("secretKey"))
-    q, _ := New(account, os.Getenv("endpoint"), randomString(10))
+    account, _ := tencent.NewAccount(os.Getenv("CMQ_SECRET_ID"),
+        os.Getenv("CMQ_SECRET_KEY"))
+    q, _ := New(account, os.Getenv("CMQ_QUEUE_ENDPOINT"), randomString(10))
 
     result, err := q.Create(1000000, 30, 3600, 1, 7 * 24 * 3600, 0)
     if err != nil {

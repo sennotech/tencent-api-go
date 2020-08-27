@@ -73,12 +73,11 @@ func (p *parameter) query() string {
 		"SignatureMethod": p.signatureMethod,
 	}
 	for k, v := range p.others {
-		params[k] = url.QueryEscape(v)
-
+		params[k] = v
 	}
 	params["Signature"] = p.signature(params)
 
-	return mapToParams(params)
+	return url.QueryEscape(mapToParams(params))
 }
 
 func (p *parameter) signature(params map[string]interface{}) string {

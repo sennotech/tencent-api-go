@@ -12,7 +12,6 @@ import (
 	"net/url"
 	"path"
 	"sort"
-	"strings"
 	"time"
 )
 
@@ -77,7 +76,7 @@ func (p *parameter) query() string {
 	}
 	params["Signature"] = p.signature(params)
 
-	return url.QueryEscape(mapToParams(params))
+	return mapToParams(params)
 }
 
 func (p *parameter) signature(params map[string]interface{}) string {
@@ -121,11 +120,11 @@ func keys(m map[string]interface{}) []string {
 }
 
 func mapToParams(m map[string]interface{}) string {
-	var params []string
+	params := url.Values{}
 
 	for k, v := range m {
-		params = append(params, fmt.Sprintf("%v=%v", k, v))
+		params.Add(k, v.(string))
 	}
 
-	return strings.Join(params, "&")
+	return params.Encode()
 }

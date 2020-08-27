@@ -60,7 +60,7 @@ func newParameter(scheme, domain, path, action, region, secretId,
 }
 
 func (p *parameter) url() string {
-	return url.QueryEscape(fmt.Sprintf("%s://%s?%s", p.scheme, path.Join(p.domain, p.path), p.query()))
+	return fmt.Sprintf("%s://%s?%s", p.scheme, path.Join(p.domain, p.path), p.query())
 }
 
 func (p *parameter) query() string {
@@ -73,7 +73,7 @@ func (p *parameter) query() string {
 		"SignatureMethod": p.signatureMethod,
 	}
 	for k, v := range p.others {
-		params[k] = v
+		params[k] = url.QueryEscape(v)
 	}
 	params["Signature"] = p.signature(params)
 

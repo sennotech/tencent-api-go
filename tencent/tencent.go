@@ -74,6 +74,7 @@ func (p *parameter) query() string {
 	}
 	for k, v := range p.others {
 		params[k] = url.QueryEscape(v)
+
 	}
 	params["Signature"] = p.signature(params)
 

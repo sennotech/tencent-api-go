@@ -12,7 +12,7 @@ func TestPublishMessage(t *testing.T) {
         os.Getenv("CMQ_SECRET_KEY"))
     topic, _ := New(account, os.Getenv("CMQ_TOPIC_ENDPOINT"), os.Getenv("CMQ_TOPIC_NAME"))
 
-    result, err := topic.PublishMessage("message", []string{"image"}, "")
+    result, err := topic.PublishMessage("message sdf", []string{"image"}, "")
     if err != nil {
         t.Error(err)
     }

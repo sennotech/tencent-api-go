@@ -60,7 +60,7 @@ func newParameter(scheme, domain, path, action, region, secretId,
 }
 
 func (p *parameter) url() string {
-	return fmt.Sprintf("%s://%s?%s", p.scheme, path.Join(p.domain, p.path), p.query())
+	return url.QueryEscape(fmt.Sprintf("%s://%s?%s", p.scheme, path.Join(p.domain, p.path), p.query()))
 }
 
 func (p *parameter) query() string {

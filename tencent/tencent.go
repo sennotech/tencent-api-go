@@ -12,6 +12,7 @@ import (
 	"net/url"
 	"path"
 	"sort"
+	"strconv"
 	"time"
 )
 
@@ -31,12 +32,14 @@ type parameter struct {
 	secretId        string
 	secretKey       string
 	signatureMethod string
-	timestamp       int64
-	nonce           int
+	timestamp       string
+	nonce           string
 }
 
 func newParameter(scheme, domain, path, action, region, secretId,
 	secretKey string, others map[string]string) *parameter {
+	now := time.Now().Unix()
+
 	p := &parameter{
 		scheme:          scheme,
 		httpMethod:      http.MethodGet,
@@ -48,12 +51,12 @@ func newParameter(scheme, domain, path, action, region, secretId,
 		secretId:        secretId,
 		secretKey:       secretKey,
 		signatureMethod: HmacSHA256,
-		timestamp:       time.Now().Unix(),
+		timestamp:       strconv.FormatInt(now, 10),
 	}
 
-	rand.Seed(p.timestamp)
+	rand.Seed(now)
 	rand.Seed(rand.Int63())
-	p.nonce = rand.Intn(100000)
+	p.nonce = strconv.Itoa(rand.Intn(100000))
 
 	return p
 }
@@ -63,7 +66,7 @@ func (p *parameter) url() string {
 }
 
 func (p *parameter) query() string {
-	params := map[string]interface{}{
+	params := map[string]string{
 		"Action":          p.action,
 		"Region":          p.region,
 		"Timestamp":       p.timestamp,
@@ -79,7 +82,7 @@ func (p *parameter) query() string {
 	return mapToParams(params)
 }
 
-func (p *parameter) signature(params map[string]interface{}) string {
+func (p *parameter) signature(params map[string]string) string {
 	keys := keys(params)
 	sort.Strings(keys)
 
@@ -109,7 +112,7 @@ func (p *parameter) hash() hash.Hash {
 	}
 }
 
-func keys(m map[string]interface{}) []string {
+func keys(m map[string]string) []string {
 	var keys []string
 
 	for k := range m {
@@ -119,11 +122,11 @@ func keys(m map[string]interface{}) []string {
 	return keys
 }
 
-func mapToParams(m map[string]interface{}) string {
+func mapToParams(m map[string]string) string {
 	params := url.Values{}
 
 	for k, v := range m {
-		params.Add(k, v.(string))
+		params.Add(k, v)
 	}
 
 	return params.Encode()

@@ -48,16 +48,22 @@ func (e *InvalidEndpointError) Error() string {
     return fmt.Sprintf("invalid endpoint: %s", e.endpoint)
 }
 
-var _http = regexp.MustCompile("(http)://(cmq-queue-(\\w+).api.tencentyun.com)")
-var _https = regexp.MustCompile("(https)://(cmq-queue-(\\w+).api.qcloud.com)")
+var _http1 = regexp.MustCompile("(http)://(cmq-queue-(\\w+).api.tencentyun.com)")
+var _http2 = regexp.MustCompile("(http)://((\\w+).mqadapter.cmq.tencentyun.com)")
+var _https1 = regexp.MustCompile("(https)://(cmq-queue-(\\w+).api.qcloud.com)")
+var _https2 = regexp.MustCompile("(https)://(cmq-(\\w+).public.tencenttdmq.com)")
 
 func parse(endpoint string) (scheme, domain, region string, err error) {
     var reg *regexp.Regexp
     switch {
-    case _http.MatchString(endpoint):
-        reg = _http
-    case _https.MatchString(endpoint):
-        reg = _https
+    case _http1.MatchString(endpoint):
+        reg = _http1
+    case _http2.MatchString(endpoint):
+        reg = _http2
+    case _https1.MatchString(endpoint):
+        reg = _https1
+    case _https2.MatchString(endpoint):
+        reg = _https2
     default:
         err = &InvalidEndpointError{endpoint}
         return

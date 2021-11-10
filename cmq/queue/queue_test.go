@@ -2,7 +2,7 @@ package queue
 
 import "testing"
 
-func TestParseHttpsAndQCloud(t *testing.T) {
+func TestParseHttps1(t *testing.T) {
     scheme, domain, region, err := parse("https://cmq-queue-sh.api.qcloud.com")
     if err != nil {
         t.Error("没有正确解析endpoint")
@@ -18,7 +18,23 @@ func TestParseHttpsAndQCloud(t *testing.T) {
     }
 }
 
-func TestParseHttpAndTencentyun(t *testing.T) {
+func TestParseHttps2(t *testing.T) {
+    scheme, domain, region, err := parse("https://cmq-sh.public.tencenttdmq.com")
+    if err != nil {
+        t.Error("没有正确解析endpoint")
+    }
+    if scheme != "https" {
+        t.Error("没有正确解析scheme")
+    }
+    if domain != "cmq-sh.public.tencenttdmq.com" {
+        t.Error("没有正确解析domain")
+    }
+    if region != "sh" {
+        t.Error("没有正确解析region")
+    }
+}
+
+func TestParseHttp1(t *testing.T) {
     scheme, domain, region, err := parse("http://cmq-queue-gz.api.tencentyun.com")
     if err != nil {
         t.Error("没有正确解析endpoint")
@@ -30,6 +46,22 @@ func TestParseHttpAndTencentyun(t *testing.T) {
         t.Error("没有正确解析domain")
     }
     if region != "gz" {
+        t.Error("没有正确解析region")
+    }
+}
+
+func TestParseHttp2(t *testing.T) {
+    scheme, domain, region, err := parse("http://sh.mqadapter.cmq.tencentyun.com")
+    if err != nil {
+        t.Error("没有正确解析endpoint")
+    }
+    if scheme != "http" {
+        t.Error("没有正确解析scheme")
+    }
+    if domain != "sh.mqadapter.cmq.tencentyun.com" {
+        t.Error("没有正确解析domain")
+    }
+    if region != "sh" {
         t.Error("没有正确解析region")
     }
 }
